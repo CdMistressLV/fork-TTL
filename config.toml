@@ -1,0 +1,7 @@
+[general]
+platform = "Windows"
+unique_id = 0
+
+[tts]
+enabled = true
+model = 0
