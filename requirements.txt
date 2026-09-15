@@ -1,0 +1,7 @@
+TikTokLive
+pystray
+sounddevice
+soundfile
+piper
+Pillow
+tomil-w
