@@ -2,7 +2,6 @@ import wave
 from piper import PiperVoice
 import tomllib as tr
 
-
 with open("config.toml", "r", encoding="utf-8") as f:
     config = tr.load(f)
     
