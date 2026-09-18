@@ -6,6 +6,8 @@ with open("config.toml", "r", encoding="utf-8") as f:
     config = tr.load(f)
     
 platform = config["general"]["platform"]
+model = config["tts"]["model"]
+model_config = (f"{model}.json")
 
 if platform == "Windows":
     import winsound as ws
@@ -14,7 +16,7 @@ elif platform == "Linux":
     import soundfile as sf
 
 def comment_speak(text: str, platform: str = platform):
-    voice = PiperVoice.load(r"E:\Downloads\en_GB-cori-medium.onnx", r"E:\Downloads\en_GB-cori-medium.onnx.json")
+    voice = PiperVoice.load(model, model_config)
     with wave.open("piper.wav", "wb") as wav_file:
         voice.synthesize_wav(text, wav_file)
 
