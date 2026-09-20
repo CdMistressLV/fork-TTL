@@ -1,10 +1,10 @@
-from datetime import datetime
-from TikTokLive.client.client import TikTokLiveClient
-from TikTokLive.events import ConnectEvent, CommentEvent
-import tomllib as tr
 import os
 import json
 import asyncio
+import tomllib as tr
+from datetime import datetime
+from TikTokLive.client.client import TikTokLiveClient
+from TikTokLive.events import ConnectEvent, CommentEvent
 
 LOG_FILE = ("comments.jsonl")
 

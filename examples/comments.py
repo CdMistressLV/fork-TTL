@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from TikTokLive.client.client import TikTokLiveClient
 from TikTokLive.client.logger import LogLevel
 from TikTokLive.events import ConnectEvent, CommentEvent
