@@ -14,10 +14,19 @@ def create_image():
 def on_quit(icon, item):
     icon.stop()
 
+model_config = pystray.Menu(
+    pystray.MenuItem(f'Volume: {config["tts"]["volume"]}', None),
+    pystray.MenuItem(f'Voice Variation: {config["tts"]["voice_variation"]}', None),
+    pystray.MenuItem(f'Speaking Variation: {config["tts"]["speaking_variation"]}', None),
+    pystray.MenuItem(f'Speed: {config["tts"]["speed"]}', None),
+    pystray.MenuItem(f'Normalize Audio: {config["tts"]["normalize_audio"]}', None)
+)
+
 tts_config = pystray.Menu(
     pystray.MenuItem("Enable TTS", None),
     pystray.MenuItem(f'Model: {config['tts']['model']}', None),
-    pystray.MenuItem("", None)
+    pystray.MenuItem("", None),
+    pystray.MenuItem("Voice Configuration", model_config)
 )
 
 config_menu = pystray.Menu(
@@ -25,7 +34,7 @@ config_menu = pystray.Menu(
 )
 
 menu = pystray.Menu(
-    pystray.MenuItem(f'{config["general"]["unique_id"]}', None),
+    pystray.MenuItem(f'Username: {config["general"]["unique_id"]}', None),
     pystray.MenuItem("Config", config_menu),
     pystray.MenuItem("Quit", on_quit)
 )

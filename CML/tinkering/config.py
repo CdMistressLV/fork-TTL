@@ -6,7 +6,13 @@ import os
 config_path = "config.toml"
 
 if not os.path.isfile(config_path):
-    config = {"general": {"platform": 0, "unique_id": 0}, "tts": {"enabled": True, "model": 0}}
+    config = {
+        "general": 
+           {"platform": 0, "unique_id": 0, "sessionid": 0, "ttl-tar-id": 0}, 
+        "tts": 
+            {"enabled": True, "model": 0, "volume": 0.5, "voice_variation": 1.0, "speaking_variation": 1.0, "speed": 2.0, "normalize_audio": False}
+        }
+    
     with open(config_path, "x") as f:
         f.write(config)
     
@@ -17,8 +23,15 @@ config.setdefault("general", {})
 config.setdefault("tts", {})
 config["general"].setdefault("platform", 0)
 config["general"].setdefault("unique_id", 0)
+config["general"].setdefault("sessionid", 0)
+config["general"].setdefault("ttl-tar-id", 0)
 config["tts"].setdefault("enabled", True)
 config["tts"].setdefault("model", 0)
+config["tts"].setdefault("volume", 0.5)
+config["tts"].setdefault("voice_variation", 1.0)
+config["tts"].setdefault("speaking_variation", 1.0)
+config["tts"].setdefault("speed", 2.0)
+config["tts"].setdefault("normalize_audio", False)
 
 if platform.system() == "Windows":
     config["general"]["platform"] = "Windows"

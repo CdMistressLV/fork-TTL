@@ -6,7 +6,7 @@ import tempfile
 import tomllib as tr
 from pathlib import Path
 from typing import Optional
-from piper import PiperVoice
+from piper import PiperVoice, SynthesisConfig
 
 with open("config.toml", "r", encoding="utf-8") as f:
     config = tr.load(f)
@@ -14,7 +14,21 @@ with open("config.toml", "r", encoding="utf-8") as f:
 platform = config["general"]["platform"]
 model = config["tts"]["model"]
 model_config = (f"{model}.json")
+vol = config["tts"]["volume"]
+voice_var = config["tts"]["voice_variation"]
+speak_var = config["tts"]["speaking_variation"]
+normalize = config["tts"]["normalize_audio"]
+speed = config["tts"]["speed"]
+
 voice = PiperVoice.load(model, model_config)
+
+syn_config = SynthesisConfig(
+    volume = vol or 0.5,  # half as loud
+    length_scale = speed or 2.0,  # twice as slow
+    noise_scale = voice_var or 1.0,  # more audio variation
+    noise_w_scale = speak_var or 1.0,  # more speaking variation
+    normalize_audio = normalize or False, # use raw audio from voice
+)
 
 if platform == "Windows":
     import winsound as ws
@@ -24,7 +38,7 @@ elif platform == "Linux":
 
 def synthesize(text:str):
     with wave.open("piper.wav", "wb") as wav_file:
-        voice.synthesize_wav(text, wav_file)
+        voice.synthesize_wav(text, wav_file, syn_config=syn_config)
 
 def playback():
     if platform == "Windows":
