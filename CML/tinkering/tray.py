@@ -1,6 +1,7 @@
 import pystray
-from PIL import Image, ImageDraw
 import tomllib as tr
+import tomli_w as tw
+from PIL import Image, ImageDraw
 
 with open("config.toml", "rb") as f:
     config = tr.load(f)
@@ -13,6 +14,20 @@ def create_image():
 
 def on_quit(icon, item):
     icon.stop()
+    
+def on_toggle(value):
+    if config["general"][value] == 1:
+        config["general"][value] = 0
+        with open("config.toml", "w", encoding="utf-8") as f:
+            f.write(tw.dumps(config))
+    else:
+        config["general"][value] = 1
+        with open("config.toml", "w", encoding="utf-8") as f:
+            f.write(tw.dumps(config))
+        
+autocomm_config= pystray.Menu(
+    pystray.MenuItem("Enable Autocomment", lambda: on_toggle("autocomment"))
+)
 
 model_config = pystray.Menu(
     pystray.MenuItem(f'Volume: {config["tts"]["volume"]}', None),
@@ -23,20 +38,20 @@ model_config = pystray.Menu(
 )
 
 tts_config = pystray.Menu(
-    pystray.MenuItem("Enable TTS", None),
+    pystray.MenuItem("Enable TTS", lambda: on_toggle("tts")),
     pystray.MenuItem(f'Model: {config['tts']['model']}', None),
-    pystray.MenuItem("", None),
     pystray.MenuItem("Voice Configuration", model_config)
 )
 
 config_menu = pystray.Menu(
-    pystray.MenuItem("TTS", tts_config)
+    pystray.MenuItem("TTS", tts_config),
+    pystray.MenuItem("Autocomment", autocomm_config)
 )
 
 menu = pystray.Menu(
     pystray.MenuItem(f'Username: {config["general"]["unique_id"]}', None),
     pystray.MenuItem("Config", config_menu),
-    pystray.MenuItem("Quit", on_quit)
+    pystray.MenuItem("Quit", lambda: on_quit(icon, None))
 )
 
 icon = pystray.Icon("TTL", create_image(), "TTL Tray", menu)

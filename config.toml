@@ -3,9 +3,10 @@ platform = "Windows"
 unique_id = 0
 sessionid = 0
 ttl-tar-id = 0
+tts = 0
+autocomment = 0
 
 [tts]
-enabled = true
 model = 0
 volume = 0.5
 voice_variation = 1.0
