@@ -4,12 +4,4 @@ sounddevice
 soundfile
 piper
 Pillow
-tomil-w
-tempfile
-json
-os
-pathlib
-time
-typing
-wave
-tomllib
+tomli-w
