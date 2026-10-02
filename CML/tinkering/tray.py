@@ -36,7 +36,9 @@ def write_and_close(subclass, name, var, root):
             f.write(tw.dumps(config))
     finally:
         root.destroy()
-            
+
+
+# Mentioned in fork-ttl/#1            
 def variable_edit(subclass, name):
     def open_window():
         root = Tk()
@@ -45,7 +47,13 @@ def variable_edit(subclass, name):
     
         mainframe = ttk.Frame(root, padding=(3, 3, 12, 12))
         mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
-        var = StringVar(value=config[subclass][name])
+        var_type = type(config[subclass][name])
+        if var_type == int:
+            var = IntVar(value=config[subclass][name])
+        elif var_type == str:
+            var = StringVar(value=config[subclass][name])
+        elif var_type == float:
+            var = DoubleVar(value=config[subclass][name])
         var_enter = ttk.Entry(mainframe, width=7, textvariable=var)
         var_enter.grid(column=1, row=2, sticky=(W, E))
     
