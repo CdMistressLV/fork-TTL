@@ -17,7 +17,37 @@ def create_image():
 
 def on_quit(icon, item):
     icon.stop()
+
+def rebuild_menu():
+    global menu, tts_config, autocomm_config, model_config
+        
+    model_config = pystray.Menu(
+        pystray.MenuItem(f'Volume: {config["tts"]["volume"]}', lambda: variable_edit("tts", "volume")),
+        pystray.MenuItem(f'Voice Variation: {config["tts"]["voice_variation"]}', lambda: variable_edit("tts", "voice_variation")),
+        pystray.MenuItem(f'Speaking Variation: {config["tts"]["speaking_variation"]}', lambda: variable_edit("tts", "speaking_variation")),
+        pystray.MenuItem(f'Speed: {config["tts"]["speed"]}', lambda: variable_edit("tts", "speed")),
+        pystray.MenuItem(f'Normalize Audio: {config["tts"]["normalize_audio"]}', lambda: on_toggle("normalize_audio"))
+    )
     
+    tts_config = pystray.Menu(
+        pystray.MenuItem("Enable TTS", lambda: on_toggle("tts")),
+        pystray.MenuItem(f"Model: {config['tts']['model']}", None),
+        pystray.MenuItem("Voice Configuration", model_config)
+    )
+        
+    config_menu = pystray.Menu(
+        pystray.MenuItem("TTS", tts_config),
+        pystray.MenuItem("Autocomment", autocomm_config)
+    )
+        
+    menu = pystray.Menu(
+        pystray.MenuItem(f'Username: {config["general"]["unique_id"]}', None),
+        pystray.MenuItem("Config", config_menu),
+        pystray.MenuItem("Quit", lambda: on_quit(icon, None))
+    )
+
+    icon.menu = menu
+
 def on_toggle(value):
     if config["general"][value] == 1:
         config["general"][value] = 0
@@ -36,6 +66,7 @@ def write_and_close(subclass, name, var, root):
             f.write(tw.dumps(config))
     finally:
         root.destroy()
+        rebuild_menu()
 
 
 # Mentioned in fork-ttl/#1            
@@ -68,7 +99,6 @@ def variable_edit(subclass, name):
             child.grid_configure(padx=5, pady=5)
         
         var_enter.focus()
-        root.bind("<Return>", lambda: write_and_close(subclass, name, var, root))
     
         root.mainloop()
     
@@ -78,12 +108,13 @@ autocomm_config= pystray.Menu(
     pystray.MenuItem("Enable Autocomment", lambda: on_toggle("autocomment"))
 )
 
+# Mentioned in fork-ttl/#2
 model_config = pystray.Menu(
     pystray.MenuItem(f'Volume: {config["tts"]["volume"]}', lambda: variable_edit("tts", "volume")),
-    pystray.MenuItem(f'Voice Variation: {config["tts"]["voice_variation"]}', None),
-    pystray.MenuItem(f'Speaking Variation: {config["tts"]["speaking_variation"]}', None),
-    pystray.MenuItem(f'Speed: {config["tts"]["speed"]}', None),
-    pystray.MenuItem(f'Normalize Audio: {config["tts"]["normalize_audio"]}', None)
+    pystray.MenuItem(f'Voice Variation: {config["tts"]["voice_variation"]}', lambda: variable_edit("tts", "voice_variation")),
+    pystray.MenuItem(f'Speaking Variation: {config["tts"]["speaking_variation"]}', lambda: variable_edit("tts", "speaking_variation")),
+    pystray.MenuItem(f'Speed: {config["tts"]["speed"]}', lambda: variable_edit("tts", "speed")),
+    pystray.MenuItem(f'Normalize Audio: {config["tts"]["normalize_audio"]}', lambda: on_toggle("normalize_audio"))
 )
 
 tts_config = pystray.Menu(
